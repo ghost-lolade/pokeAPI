@@ -4,14 +4,17 @@ import cors from "cors";
 import express from "express";
 import { PokemonController } from "./pokemon.controller";
 import { PokemonService } from "./services/pokemon.service";
+import mongoose, { ConnectOptions } from "mongoose";
+import { MONGO_URL } from "./constants/pokeApi.constants";
 
 class App {
-    public app: Application;
+    public app: express.Application;
 
     constructor() {
 
         this.app = express();
         this.setConfig();
+        this.setMongoConfig();
         this.setControllers();
     }
 
@@ -25,6 +28,13 @@ class App {
         // Enables cors
         this.app.use(cors());
     }
+
+    private setMongoConfig() {
+        mongoose.Promise = global.Promise;
+        mongoose.connect(MONGO_URL, {
+          useNewUrlParser: true
+        } as ConnectOptions);
+      }
 
     private setControllers(): void {
 
